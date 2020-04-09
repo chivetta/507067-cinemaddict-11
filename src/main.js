@@ -3,7 +3,6 @@
 // КОНСТАНТЫ
 
 const NUMBER_OF_CARDS = 5;
-const NUMBER_OF_EXTRAS = 2;
 
 // ОСНОВНЫЕ БЛОКИ
 
@@ -48,9 +47,15 @@ const getTemplateOfLoadButton = () => (
   `<button class="films-list__show-more">Show more</button>`
 );
 
-const getTemplateOfExtraFilms = () => (
+const getTemplateOfRatedFilms = () => (
   `<section class="films-list--extra">
-    <h2 class="films-list__title"></h2>
+    <h2 class="films-list__title">Top rated</h2>
+  </section>`
+);
+
+const getTemplateOfCommentedFilms = () => (
+  `<section class="films-list--extra">
+    <h2 class="films-list__title">Most commented</h2>
   </section>`
 );
 
@@ -256,7 +261,7 @@ const renderElement = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const getCards = (number, container) => {
+const renderCards = (number, container) => {
   for (let i = 0; i < number; i++) {
     renderElement(container, getTemplateOfCard());
   }
@@ -286,25 +291,23 @@ renderElement(filmsList, getTemplateOfCardsContainer());
 
 const cardsContainer = filmsList.querySelector(`.films-list__container`);
 
-getCards(NUMBER_OF_CARDS, cardsContainer);
+renderCards(NUMBER_OF_CARDS, cardsContainer);
 
 renderElement(filmsList, getTemplateOfLoadButton());
 
 
 // ЭКСТРА-БЛОКИ ФИЛЬМОВ
 
-for (let i = 0; i < NUMBER_OF_EXTRAS; i++) {
-  renderElement(blockOfFilms, getTemplateOfExtraFilms());
+renderElement(blockOfFilms, getTemplateOfRatedFilms());
+renderElement(blockOfFilms, getTemplateOfCommentedFilms());
 
-  let blocks = blockOfFilms.querySelectorAll(`.films-list--extra`);
-  let title = blocks[i].querySelector(`.films-list__title`);
-  title.textContent = i === 0 ? `Top rated` : `Most commented`;
+const blocks = blockOfFilms.querySelectorAll(`.films-list--extra`);
 
-  renderElement(blocks[i], getTemplateOfCardsContainer());
+for (const block of blocks) {
+  renderElement(block, getTemplateOfCardsContainer());
 
-  let blockOfCards = blocks[i].querySelector(`.films-list__container`);
-
-  getCards(NUMBER_OF_EXTRAS, blockOfCards);
+  let blockOfCards = block.querySelector(`.films-list__container`);
+  renderCards(blocks.length, blockOfCards);
 }
 
 // ПОПАП
